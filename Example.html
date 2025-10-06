@@ -66,7 +66,7 @@
       }
 
       .clickable-image {
-        height: 120px; /* adjust this value as needed */
+        height: 120px;
         cursor: pointer;
         border: 2px solid transparent;
         border-radius: 5px;
@@ -74,13 +74,14 @@
       }
 
       .clickable-image:hover {
-        transform: scale(1.1); /* slight grow on hover */
+        transform: scale(1.1);
       }
     </style>
   </head>
 
   <body>
     <div class="device">
+      <!-- TAB 1 -->
       <div id="Text" class="tabcontent">
         <h1>Text Screen</h1>
         <div style="height: 700px; width: 500px; overflow: auto; padding: 10px">
@@ -157,6 +158,7 @@
         </div>
       </div>
 
+      <!-- TAB 2 -->
       <div id="LR" class="tabcontent">
         <h1>Text in Lower Right Corner</h1>
         <div
@@ -167,10 +169,11 @@
             text-align: right;
           "
         >
-          <p>Paris is the capital of France.</p>
+          <p>Down Here</p>
         </div>
       </div>
 
+      <!-- TAB 3 -->
       <div id="Colors" class="tabcontent">
         <h1>Colors</h1>
         <div style="color: yellow; background-color: black">
@@ -181,6 +184,7 @@
         </div>
       </div>
 
+      <!-- TAB 4 -->
       <div id="Profile" class="tabcontent">
         <h1>User Profile</h1>
         <img
@@ -189,7 +193,6 @@
           onclick="profileImageClicked('Profile Notification')"
           alt="Click me!"
         />
-
         <p style="font-weight: bold; font-size: 46px">John Doe</p>
 
         <div
@@ -214,6 +217,7 @@
         </div>
       </div>
 
+      <!-- TAB 5 -->
       <div id="Choices" class="tabcontent">
         <h1>Choices Screen</h1>
         <h1>Appetizer:</h1>
@@ -240,29 +244,34 @@
           readonly
           style="margin-top: 10px"
         ></textarea>
-        <script>
-          function showSelection() {
-            const appetizer = document.querySelector(
-              'input[name="appetizer"]:checked'
-            );
-            const entree = document.getElementById("entrees").value;
-            let result = "";
-            if (appetizer) {
-              result += "Appetizer: " + appetizer.value + "\n";
-            } else {
-              result += "Appetizer: (none selected)\n";
-            }
-            result += "Entree: " + entree;
-            document.getElementById("selectionResult").value = result;
-          }
-        </script>
       </div>
 
+      <!-- TAB 6 -->
       <div id="ToDo" class="tabcontent">
         <h1>To Do List</h1>
-        <p>Madrid is the capital city of Spain.</p>
+
+        <div style="margin-bottom: 20px;">
+          <input
+            type="text"
+            id="todoInput"
+            placeholder="Enter a new task..."
+            style="padding: 10px; width: 60%; font-size: 16px;"
+          />
+          <button
+            onclick="addTodoItem()"
+            style="padding: 10px 20px; font-size: 16px; cursor: pointer;"
+          >
+            Add
+          </button>
+        </div>
+
+        <ul
+          id="todoList"
+          style="list-style-type: none; padding: 0; text-align: left;"
+        ></ul>
       </div>
 
+      <!-- BOTTOM NAVIGATION -->
       <button
         class="tablink"
         onclick="openTab('Text', this, 'red')"
@@ -292,6 +301,7 @@
         <br />ToDo
       </button>
 
+      <!-- SHARED SCRIPT -->
       <script>
         function openTab(name, elmnt, color) {
           var i, tabcontent, tablinks;
@@ -307,7 +317,6 @@
           elmnt.style.backgroundColor = color;
         }
 
-        // Function for clickable image in Profile tab
         function profileImageClicked(id) {
           if (id) {
             var el = document.getElementById(id);
@@ -315,7 +324,68 @@
           }
         }
 
-        // Get the element with id="defaultOpen" and click on it
+        function showSelection() {
+          const appetizer = document.querySelector(
+            'input[name="appetizer"]:checked'
+          );
+          const entree = document.getElementById("entrees").value;
+          let result = "";
+          if (appetizer) {
+            result += "Appetizer: " + appetizer.value + "\n";
+          } else {
+            result += "Appetizer: (none selected)\n";
+          }
+          result += "Entree: " + entree;
+          document.getElementById("selectionResult").value = result;
+        }
+
+        function addTodoItem() {
+          const input = document.getElementById("todoInput");
+          const text = input.value.trim();
+
+          if (text === "") {
+            alert("Please enter a task!");
+            return;
+          }
+
+          const li = document.createElement("li");
+          li.textContent = text;
+          li.style.fontSize = "18px";
+          li.style.marginBottom = "10px";
+          li.style.display = "flex";
+          li.style.justifyContent = "space-between";
+          li.style.alignItems = "center";
+          li.style.backgroundColor = "white";
+          li.style.color = "black";
+          li.style.padding = "8px 12px";
+          li.style.borderRadius = "5px";
+
+          li.addEventListener("click", function () {
+            li.style.textDecoration =
+              li.style.textDecoration === "line-through"
+                ? "none"
+                : "line-through";
+          });
+
+          const delBtn = document.createElement("button");
+          delBtn.textContent = "Delete";
+          delBtn.style.backgroundColor = "red";
+          delBtn.style.color = "white";
+          delBtn.style.border = "none";
+          delBtn.style.padding = "5px 10px";
+          delBtn.style.borderRadius = "4px";
+          delBtn.style.cursor = "pointer";
+
+          delBtn.onclick = function (e) {
+            e.stopPropagation();
+            li.remove();
+          };
+
+          li.appendChild(delBtn);
+          document.getElementById("todoList").appendChild(li);
+          input.value = "";
+        }
+
         document.getElementById("defaultOpen").click();
       </script>
     </div>
